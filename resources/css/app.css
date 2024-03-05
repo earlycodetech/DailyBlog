@@ -1,0 +1,35 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+#latestPosts img {
+    aspect-ratio: 16/5;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+
+#latestPosts .carousel-caption {
+    text-align: left;
+    background-color: #05052e36;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+.post-card .box {
+    overflow: hidden;
+}
+.post-card .box img {
+    aspect-ratio: 16/9;
+    transition: 200ms;
+}
+
+.post-card:hover .box img {
+    scale: 1.15;
+}
+
+@media screen and (max-width: 700px){
+    #latestPosts img {
+        aspect-ratio: 16/9;
+    }
+} 
+
+
