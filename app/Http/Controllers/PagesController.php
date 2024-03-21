@@ -39,9 +39,9 @@ class PagesController extends Controller
         if (auth()->check()) {
             $user_id = auth()->id();
             $post_id = $post->id;
-            $hasLiked = Like::where('user_id', $user_id)->where('post_id', $post_id)->exists();  
+            $hasLiked = Like::where('user_id', $user_id)->where('post_id', $post_id)->exists();
         }
-        return view('posts.read', compact('post' , 'hasLiked'));
+        return view('posts.read', compact('post', 'hasLiked'));
     }
 
 
@@ -101,16 +101,36 @@ class PagesController extends Controller
 
     public function contact_submit(Request $request)
     {
-       $data =  $request->validate([
-        'name' => "required|string",
-        'email' => "required|string|email",
-        'message' => "required|string"
-       ]);
+        $data =  $request->validate([
+            'name' => "required|string",
+            'email' => "required|string|email",
+            'message' => "required|string"
+        ]);
 
-       $to = "dailyblog@blog.com";
-       Mail::to($to)
-        ->send(new ContactMail($data));
-       
+        $to = "dailyblog@blog.com";
+        Mail::to($to)
+            ->send(new ContactMail($data));
+
         return back()->with('success', "Mail has been sent");
+    }
+
+    public function category_view($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        return view('category', compact('category'));
+    }
+
+    public function search_posts(Request $request)
+    {
+        $keyword = $request->input('search');
+        if (!$keyword) {
+            return redirect('/')->with('error', "Please enter a keyword");
+        }
+
+        $posts = Post::where('title', 'like', "%$keyword%")
+            ->orWhere('slug', 'like', "%$keyword%")->latest()->paginate(12);
+
+
+        return view('search', compact('posts', 'keyword'));
     }
 }

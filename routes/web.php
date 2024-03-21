@@ -24,6 +24,8 @@ Route::get('contact', [PagesController::class, "contact_view"])->name('contact.p
 Route::post('contact', [PagesController::class, "contact_submit"])->name('contact.submit');
 
 Route::get('/read/{slug}', [PagesController::class, 'post_view'])->name('read.post');
+Route::get('/category/{slug}', [PagesController::class, 'category_view'])->name('category.view');
+Route::get('search', [PagesController::class, 'search_posts'])->name('posts.search');
 
 
 Route::post('comment/{slug}', [PagesController::class, 'new_comment'])->name('new.comment');

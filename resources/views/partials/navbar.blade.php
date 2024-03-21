@@ -19,12 +19,14 @@
                         Categories
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('categories.index') }}">All Categories</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        @php
+                            $categories = \App\Models\Category::all();
+                        @endphp
+
+                        @foreach ($categories as $category)
+                            
+                        <li><a class="dropdown-item" href="{{ route('category.view', ['slug'=> $category->slug]) }}">{{ $category->title }}</a></li>
+                        @endforeach
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -74,8 +76,8 @@
                     </li>
                 @endguest
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" action="{{ route('posts.search') }}" role="search">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">
                     <i class="fa-solid fa-search"></i>
                 </button>
