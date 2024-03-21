@@ -12,6 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendors/ckeditor/ckeditor.css') }}">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
@@ -25,5 +26,16 @@
 
     @include('partials.errors')
     @include('partials.footer')
+
+    <script src="{{ asset('vendors/ckeditor/ckeditor.js') }}"></script>
+    <script>
+        const elem = document.getElementById('ck-edit');
+
+        if (elem) {
+            ClassicEditor.create(elem,{
+
+            })
+        }
+    </script>
 </body>
 </html>

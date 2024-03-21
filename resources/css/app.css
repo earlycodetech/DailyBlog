@@ -33,3 +33,18 @@
 } 
 
 
+.ck-editor__editable_inline {
+    min-height: 300px;
+}
+
+#likes {
+    position: fixed;
+    bottom: 10%;
+    right: 1rem;
+    text-align: center;
+}
+
+#likes button {
+    border-radius: 50%;
+    padding: 10px;
+}

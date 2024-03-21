@@ -4,33 +4,47 @@
     <section>
         <div id="latestPosts" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#latestPosts" data-bs-slide-to="0" class="active" aria-current="true"
-                    aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#latestPosts" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#latestPosts" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                @forelse ($latest as $post)
+                    <button type="button" 
+                        data-bs-target="#latestPosts" 
+                        data-bs-slide-to="{{ $loop->index }}"
+                        class="{{ $loop->index == 0 ? 'active' : '' }}" 
+                        aria-current="true" 
+                        aria-label="{{ $post->title }}"
+                    ></button>
+                @empty
+                    <button type="button" data-bs-target="#latestPosts" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                @endforelse
+
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ asset('logo.png') }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>First slide label</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
+                @forelse ($latest as $post)
+                    <a href="{{ route('read.post',['slug' => $post->slug]) }}">
+                        <div class="carousel-item  {{ $loop->index == 0 ? 'active' : '' }} ">
+                            <img src="{{ asset($post->cover_image) }}" class="d-block w-100" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>
+                                    {{ $post->title }}
+                                </h5>
+                                <p>
+                                    {{ $post->abstract }}
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <div class="carousel-item active">
+                        <img src="{{ asset('logo.png') }}" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5> Welcome to Daily Blog </h5>
+                            <p>
+                                Where we deliver the news promptly.
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('logo.png') }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('logo.png') }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Third slide label</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
-                    </div>
-                </div>
+                @endforelse
+
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#latestPosts" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -46,29 +60,36 @@
 
 
     {{-- Posts Start --}}
-    <section class="my-5 container">
-        <h3 class="fw-semibold mb-4">Popular Posts</h3>
 
-        <div class="row">
-            @for ($i = 0; $i < 9; $i++)
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card border-0 shadow post-card">
-                        <div class="box border-bottom">
-                            <img src="{{ asset('boris.png') }}" class="card-img-top" alt="">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="fw-semibold">This is the title</h5>
-                            <p>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore, quibusdam?
-                            </p>
-                            <a href="" class="btn btn-primary rounded-pill">
-                                Read More <i class="fa-solid fa-book-open-reader"></i>
-                            </a>
+    @foreach ($categories as $cat)
+        <section class="my-5 container">
+            <h3 class="fw-semibold mb-4"> {{ $cat->title }} </h3>
+
+            @php
+                $posts = $cat->posts()->latest()->take(6)->get();
+            @endphp
+            <div class="row">
+                @foreach ($posts as $post)
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card border-0 shadow h-100 post-card">
+                            <div class="box border-bottom" style="height: 15rem;">
+                                <img src="{{ asset($post->cover_image) }}" class="card-img-top h-100"
+                                    alt="{{ $post->title }}">
+                            </div>
+                            <div class="card-body d-flex flex-column gap-2">
+                                <h5 class="fw-semibold">{{ $post->title }}</h5>
+                                <p class="text-truncate mt-auto">
+                                    {{ $post->abstract }}
+                                </p>
+                                <a href="{{ route('read.post', ['slug' => $post->slug]) }}" class="btn btn-primary rounded-pill mt-auto d-block mb-3">
+                                    Read More <i class="fa-solid fa-book-open-reader"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endfor
-        </div>
-    </section>
+                @endforeach
+            </div>
+        </section>
+    @endforeach
     {{-- Posts End --}}
 @endsection

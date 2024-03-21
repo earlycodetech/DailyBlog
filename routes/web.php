@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +20,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'homepage'])->name('homepage');
 
+Route::get('contact', [PagesController::class, "contact_view"])->name('contact.page');
+Route::post('contact', [PagesController::class, "contact_submit"])->name('contact.submit');
+
+Route::get('/read/{slug}', [PagesController::class, 'post_view'])->name('read.post');
+
+
+Route::post('comment/{slug}', [PagesController::class, 'new_comment'])->name('new.comment');
+Route::post('like/{slug}', [PagesController::class, 'new_like'])->name('new.like');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('categories', CategoryController::class);
+
+Route::middleware(['auth', 'admin.check'])->prefix('admin')->group(function(){
+    Route::resource('categories', CategoryController::class);
+    Route::resource('posts', PostController::class);
+});

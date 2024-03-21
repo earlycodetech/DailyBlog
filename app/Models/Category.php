@@ -23,4 +23,11 @@ class Category extends Model
     // protected $hidden = [
     //     'id'
     // ];
+
+
+    public function posts ()
+    {
+        // return $this->hasMany(related: Post::class, foreignKey: 'category_id', localKey:  "id");
+        return $this->hasMany(Post::class,'category_id');
+    }
 }
